@@ -9,6 +9,7 @@ import io.datavault.common.grpc.HeartbeatResponse;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,6 +50,12 @@ class SchedulerServiceImplTest {
         // Reset the service state before each test
         schedulerService = new SchedulerServiceImpl();
         schedulerService.fileMetadataRepository = fileMetadataRepository;
+    }
+
+    @AfterEach
+    void cleanup() {
+        // Reset all mocks to ensure clean state for next test
+        reset(fileMetadataRepository, heartbeatResponseObserver, assignWorkerResponseObserver);
     }
 
     /**

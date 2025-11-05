@@ -5,6 +5,7 @@ import com.scheduler.scheduler.repository.FileMetadataRepository;
 import com.scheduler.scheduler.service.CreateMetadataService;
 import com.scheduler.scheduler.util.TestDataBuilder;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,16 @@ class FileUploadControllerTest {
 
     @MockBean
     private com.scheduler.scheduler.service.SchedulerServiceImpl schedulerServiceImpl;
+
+    /**
+     * Cleanup method to reset mocks after each test.
+     * Ensures no test data leakage between test methods.
+     */
+    @AfterEach
+    void cleanup() {
+        // Reset all mocks to ensure clean state for next test
+        reset(metadataRepository, rabbitTemplate, createMetadataService, entityManager);
+    }
 
     /**
      * Tests successful file upload with MockMultipartFile.

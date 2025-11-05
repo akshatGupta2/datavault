@@ -67,9 +67,14 @@ class ChunkStorageIntegrationTest {
 
     @AfterEach
     void tearDown() {
+        // Clean up system properties
         System.clearProperty("WORKER_ID");
+        
         // Clean up test storage directory
         TestDataBuilder.cleanupDirectoryQuietly(new File("app/storage/" + TEST_WORKER_ID));
+        
+        // Reset mocks to ensure clean state for next test
+        org.mockito.Mockito.reset(schedulerStub);
     }
 
     /**

@@ -2,6 +2,7 @@ package com.scheduler.scheduler.repository;
 
 import com.scheduler.scheduler.model.FileMetadata;
 import com.scheduler.scheduler.util.TestDataBuilder;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -32,6 +33,18 @@ class FileMetadataRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
+
+    /**
+     * Cleanup method to clear test data after each test.
+     * Ensures no test data leakage between test methods.
+     */
+    @AfterEach
+    void cleanup() {
+        // Clear all test data from repository
+        repository.deleteAll();
+        entityManager.flush();
+        entityManager.clear();
+    }
 
     /**
      * Tests findByFilename query method.

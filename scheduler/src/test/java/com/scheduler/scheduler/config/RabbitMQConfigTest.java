@@ -1,7 +1,9 @@
 package com.scheduler.scheduler.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.reset;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -29,6 +31,16 @@ class RabbitMQConfigTest {
 
     @MockBean
     private ConnectionFactory connectionFactory;
+
+    /**
+     * Cleanup method to reset mocks after each test.
+     * Ensures no test data leakage between test methods.
+     */
+    @AfterEach
+    void cleanup() {
+        // Reset all mocks to ensure clean state for next test
+        reset(connectionFactory);
+    }
 
     /**
      * Tests that the Queue bean is created correctly.

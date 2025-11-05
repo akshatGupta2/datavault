@@ -2,6 +2,7 @@ package com.scheduler.scheduler.service;
 
 import com.scheduler.scheduler.model.FileMetadata;
 import com.scheduler.scheduler.repository.FileMetadataRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -29,6 +30,16 @@ class CreateMetadataServiceTest {
 
     @InjectMocks
     private CreateMetadataService createMetadataService;
+
+    /**
+     * Cleanup method to reset mocks after each test.
+     * Ensures no test data leakage between test methods.
+     */
+    @AfterEach
+    void cleanup() {
+        // Reset all mocks to ensure clean state for next test
+        reset(fileMetadataRepository);
+    }
 
     /**
      * Tests successful metadata creation.
