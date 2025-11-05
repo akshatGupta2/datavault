@@ -16,7 +16,8 @@ import jakarta.annotation.PreDestroy;
 @Configuration
 public class GrpcServerConfig {
 
-    private int port = 6000;
+    @Value("${grpc.server.port:6000}")
+    private int port;
 
     @Autowired
     private SchedulerServiceImpl schedulerServiceImpl;
@@ -25,8 +26,15 @@ public class GrpcServerConfig {
 
     @PostConstruct
     public void start() throws IOException {
-        server = ServerBuilder.forPort(port).addService(schedulerServiceImpl).build().start();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> server.shutdown()));
+        server = ServerBuilder.forPort(port)
+                .addService(schedulerServiceImpl)
+                .build()
+                .start();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (server != null) {
+                server.shutdown();
+            }
+        }));
     }
 
     @PreDestroy
@@ -34,6 +42,10 @@ public class GrpcServerConfig {
         if (server != null) {
             server.shutdown();
         }
+    }
+
+    public int getPort() {
+        return server != null ? server.getPort() : port;
     }
 
 }
